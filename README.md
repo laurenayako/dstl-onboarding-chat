@@ -92,6 +92,9 @@ lists, etc., are displayed correctly.
 Here are a few ideas for extending this app. Feel free to implement any of
 these, or come up with your own ideas!
 
+- Allow the user to change the model used for the LLM.
+  <https://nrp.ai/documentation/userdocs/ai/llm-managed/> has the complete list
+  of models.
 - After starting a conversation, use an LLM call in the background to
   automatically set the conversation title to something descriptive (e.g.,
   "Conversation about <topic>") after creation.
