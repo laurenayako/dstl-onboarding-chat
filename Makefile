@@ -6,7 +6,7 @@ help:
 
 .PHONY: backend
 backend: ## Run the backend development server
-	cd backend && uv run uvicorn backend.main:app --reload --port 8100
+	cd backend && PYTHONPATH=src uv run uvicorn backend.main:app --reload --port 8100
 
 .PHONY: frontend
 frontend: ## Run the frontend development server

@@ -3,15 +3,17 @@ from typing import List, Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
-
+# table with rows id, title, created_at
 class Conversation(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     title: Optional[str] = Field(default=None)
     created_at: datetime = Field(default_factory=datetime.now)
 
+    # pulls from Message class below
     messages: List["Message"] = Relationship(back_populates="conversation")
 
 
+# table with rows id, conversation_id, content, role, created_at
 class Message(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     conversation_id: Optional[int] = Field(

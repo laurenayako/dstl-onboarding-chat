@@ -8,17 +8,18 @@ sqlite_url = f"sqlite:///{sqlite_file_name}"
 connect_args = {"check_same_thread": False}
 engine = create_engine(sqlite_url, connect_args=connect_args)
 
-
+# creaets SQLite table
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
 
-
+# populates test data
 def seed_db():
-    with Session(engine) as session:
+    with Session(engine) as session:    # opens session
         existing_convs = session.exec(select(Conversation)).first()
-        if existing_convs:
+        if existing_convs:  # if database already has Conversation rows, returns
             return
-
+        
+        # seed data for development, but doesn't show on final page
         print("No existing conversations found. Seeding database...")
         # Conversation 1: General greeting
         conv1 = Conversation(title="Welcome Chat")
@@ -77,7 +78,7 @@ def seed_db():
 
         session.commit()
 
-
+# creates SQLModel Session and yields it
 def get_session():
-    with Session(engine) as session:
-        yield session
+    with Session(engine) as session:      # engine allows SQLModel to open sessions, execute SQL, and create tables
+        yield session   # allows handler to use it (otherwise ends function)
