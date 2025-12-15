@@ -17,6 +17,7 @@ function App() {
   const [input, setInput] = useState('');
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [currentConversationId, setCurrentConversationId] = useState<number | null>(null);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8100';
 
   const handleSend = async () => {
     if (!input.trim()) return; // trimes spaces, and if empty, returns
@@ -24,7 +25,7 @@ function App() {
     let conversationId = currentConversationId
 
     // if no active conversation, create one
-    if(!conversationId) {
+    if (!conversationId) {
       conversationId = await handleNewChat();
       setCurrentConversationId(conversationId)
       if (!conversationId) return;
@@ -37,7 +38,7 @@ function App() {
 
     // saves user message to backend
     try {
-      const response = await fetch(`http://127.0.0.1:8100/conversations/${conversationId}/messages`, {
+      const response = await fetch(`${API_BASE_URL}/conversations/${conversationId}/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,8 +72,8 @@ function App() {
 
   useEffect(() => {
     async function getConversations() {
-      try{
-        const res = await fetch(`http://127.0.0.1:8100/conversations/`)
+      try {
+        const res = await fetch(`${API_BASE_URL}/conversations/`)
         const data: Conversation[] = await res.json();
         setConversations(data);
       } catch (error) {
@@ -86,7 +87,7 @@ function App() {
   // when click conversation, sets as current one
   async function handleConversationClick(conversation_id: number) {
     try {
-      const res = await fetch(`http://127.0.0.1:8100/conversations/${conversation_id}/messages`)
+      const res = await fetch(`${API_BASE_URL}/conversations/${conversation_id}/messages`)
       const data: Message[] = await res.json();
       setMessages(data);
       setCurrentConversationId(conversation_id)
@@ -96,7 +97,7 @@ function App() {
   }
 
   async function createTitle(firstMessage: string) {
-    const res = await fetch('http://127.0.0.1:8100/generate-title', {
+    const res = await fetch(`${API_BASE_URL}/generate-title`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ content: firstMessage })
@@ -108,7 +109,7 @@ function App() {
   async function handleNewChat() {
     try {
       const title = await createTitle(input)
-      const res = await fetch('http://127.0.0.1:8100/conversations/', {
+      const res = await fetch(`${API_BASE_URL}/conversations/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -135,7 +136,7 @@ function App() {
 
   async function deleteConversation(conversationId: number) {
     try {
-      const response = await fetch(`http://127.0.0.1:8100/conversations/${conversationId}`, {
+      const response = await fetch(`${API_BASE_URL}/conversations/${conversationId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

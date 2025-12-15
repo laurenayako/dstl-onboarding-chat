@@ -76,7 +76,7 @@ def delete_conversation(
     return {"ok": True}     # returns to JSON to confirm success
 
 @app.get("/conversations/{conversation_id}/messages", response_model=List[Message])
-def get_message(
+def get_messages(
     conversation_id: int, session: Session = Depends(get_session)
 ):
     conversation = session.get(Conversation, conversation_id)      # gets the conversation
